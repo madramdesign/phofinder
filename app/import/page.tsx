@@ -282,7 +282,6 @@ Pho House,321 Elm Street,Chicago,Illinois,60601,312-555-3456,,Family-owned resta
               <li>Import in batches of 50-100 restaurants for best results</li>
             </ul>
           </div>
-        </div>
             </>
           )}
         </div>
