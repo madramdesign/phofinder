@@ -31,7 +31,7 @@ yarn-error.log*
 .vercel.env
 
 # firebase
-.firebase
+.firebase/
 .firebaserc
 
 # typescript
