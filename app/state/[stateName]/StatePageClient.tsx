@@ -247,28 +247,30 @@ export default function StatePageClient({ stateName }: StatePageClientProps) {
                     {selectedCity ? `${selectedCity} Restaurants` : selectedAreaCode ? `Area Code ${selectedAreaCode} Restaurants` : 'All Restaurants'} ({filteredRestaurants.length})
                   </h2>
                   <div className="restaurant-list">
-                    {filteredRestaurants.map(restaurant => (
-                      <Link key={restaurant.id} href={`/restaurant/${restaurant.id}`}>
-                        <div className="restaurant-item">
-                          <h3>{restaurant.name}</h3>
-                          <p>{restaurant.address}</p>
-                          <p>{restaurant.city}, {restaurant.state} {restaurant.zipCode}</p>
-                          {restaurant.phone && <p>Phone: {restaurant.phone}</p>}
-                          {restaurant.averageRating && restaurant.averageRating > 0 && (
-                            <div style={{ marginTop: '0.5rem' }}>
-                              <span style={{ fontWeight: 600 }}>Rating: </span>
-                              <span style={{ color: '#ffc107' }}>
-                                {'★'.repeat(Math.round(restaurant.averageRating))}
-                                {'☆'.repeat(5 - Math.round(restaurant.averageRating))}
-                              </span>
-                              <span style={{ marginLeft: '0.5rem', color: '#666' }}>
-                                ({restaurant.averageRating.toFixed(1)}) - {restaurant.totalReviews} reviews
-                              </span>
-                            </div>
-                          )}
-                        </div>
-                      </Link>
-                    ))}
+                    {filteredRestaurants
+                      .filter(restaurant => restaurant.id) // Only render restaurants with valid IDs
+                      .map(restaurant => (
+                        <Link key={restaurant.id} href={`/restaurant/${restaurant.id}`}>
+                          <div className="restaurant-item">
+                            <h3>{restaurant.name}</h3>
+                            <p>{restaurant.address}</p>
+                            <p>{restaurant.city}, {restaurant.state} {restaurant.zipCode}</p>
+                            {restaurant.phone && <p>Phone: {restaurant.phone}</p>}
+                            {restaurant.averageRating && restaurant.averageRating > 0 && (
+                              <div style={{ marginTop: '0.5rem' }}>
+                                <span style={{ fontWeight: 600 }}>Rating: </span>
+                                <span style={{ color: '#ffc107' }}>
+                                  {'★'.repeat(Math.round(restaurant.averageRating))}
+                                  {'☆'.repeat(5 - Math.round(restaurant.averageRating))}
+                                </span>
+                                <span style={{ marginLeft: '0.5rem', color: '#666' }}>
+                                  ({restaurant.averageRating.toFixed(1)}) - {restaurant.totalReviews} reviews
+                                </span>
+                              </div>
+                            )}
+                          </div>
+                        </Link>
+                      ))}
                   </div>
                 </>
               )}

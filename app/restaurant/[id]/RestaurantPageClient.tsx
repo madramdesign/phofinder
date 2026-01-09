@@ -56,18 +56,31 @@ export default function RestaurantPageClient({ restaurantId }: RestaurantPageCli
   }, [restaurantId]);
 
   const loadData = async () => {
+    if (!restaurantId) {
+      console.error('Restaurant ID is missing');
+      setRestaurant(null);
+      setLoading(false);
+      return;
+    }
+
+    setLoading(true);
     try {
       // Load restaurant first (critical)
       const restaurantData = await getRestaurant(restaurantId);
-      setRestaurant(restaurantData);
-      
-      // Load reviews separately (non-critical, can fail if index is building)
-      try {
-        const reviewsData = await getReviews(restaurantId);
-        setReviews(reviewsData);
-      } catch (reviewsError) {
-        console.warn('Reviews not available yet (index may still be building):', reviewsError);
-        setReviews([]); // Set empty reviews if query fails
+      if (!restaurantData) {
+        console.warn('Restaurant not found:', restaurantId);
+        setRestaurant(null);
+      } else {
+        setRestaurant(restaurantData);
+        
+        // Load reviews separately (non-critical, can fail if index is building)
+        try {
+          const reviewsData = await getReviews(restaurantId);
+          setReviews(reviewsData);
+        } catch (reviewsError) {
+          console.warn('Reviews not available yet (index may still be building):', reviewsError);
+          setReviews([]); // Set empty reviews if query fails
+        }
       }
     } catch (error) {
       console.error('Error loading restaurant:', error);
