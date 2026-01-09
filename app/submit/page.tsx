@@ -159,6 +159,7 @@ export default function SubmitPage() {
           <ul>
             <li><Link href="/">Home</Link></li>
             <li><Link href="/submit">Submit Restaurant</Link></li>
+            <li><Link href="/import">Bulk Import</Link></li>
             <li><Link href="/about">About</Link></li>
           </ul>
         </div>
