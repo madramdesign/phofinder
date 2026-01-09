@@ -27,12 +27,12 @@ git push -u origin main
 Click "Environment Variables" and add these 6 variables:
 
 ```
-NEXT_PUBLIC_FIREBASE_API_KEY = AIzaSyAFprLpxNB9TzvB1sZWGQCEGt_XDwj76eg
-NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN = pho-finder-5175f.firebaseapp.com
-NEXT_PUBLIC_FIREBASE_PROJECT_ID = pho-finder-5175f
-NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET = pho-finder-5175f.firebasestorage.app
-NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID = 1035496743136
-NEXT_PUBLIC_FIREBASE_APP_ID = 1:1035496743136:web:2607dfcba507001e8db085
+NEXT_PUBLIC_FIREBASE_API_KEY = your-api-key-here
+NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN = your-project-id.firebaseapp.com
+NEXT_PUBLIC_FIREBASE_PROJECT_ID = your-project-id
+NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET = your-project-id.firebasestorage.app
+NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID = your-sender-id
+NEXT_PUBLIC_FIREBASE_APP_ID = your-app-id
 ```
 
 ### Step 4: Deploy!
@@ -66,6 +66,6 @@ All submissions go directly to your Firebase Firestore database!
 
 ## Monitor Submissions
 
-**Firebase Console**: https://console.firebase.google.com/project/pho-finder-5175f/firestore/data
+**Firebase Console**: https://console.firebase.google.com/project/YOUR_PROJECT_ID/firestore/data
 
 Watch restaurants and reviews appear in real-time!

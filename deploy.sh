@@ -50,7 +50,7 @@ if command -v firebase &> /dev/null; then
                 echo "✅ Deployment successful!"
                 echo ""
                 echo "🌐 Your app is live at:"
-                firebase hosting:sites:list | grep pho-finder || echo "https://pho-finder-5175f.web.app"
+                firebase hosting:sites:list || echo "Check Firebase Console for your hosting URL"
             else
                 echo "❌ Deployment failed"
             fi

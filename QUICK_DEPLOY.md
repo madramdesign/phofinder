@@ -20,12 +20,12 @@ git push -u origin main
 3. Click "Import" your repository
 4. Add these Environment Variables (copy from `.env.local`):
    ```
-   NEXT_PUBLIC_FIREBASE_API_KEY=AIzaSyAFprLpxNB9TzvB1sZWGQCEGt_XDwj76eg
-   NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=pho-finder-5175f.firebaseapp.com
-   NEXT_PUBLIC_FIREBASE_PROJECT_ID=pho-finder-5175f
-   NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET=pho-finder-5175f.firebasestorage.app
-   NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=1035496743136
-   NEXT_PUBLIC_FIREBASE_APP_ID=1:1035496743136:web:2607dfcba507001e8db085
+   NEXT_PUBLIC_FIREBASE_API_KEY=your-api-key-here
+   NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=your-project-id.firebaseapp.com
+   NEXT_PUBLIC_FIREBASE_PROJECT_ID=your-project-id
+   NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET=your-project-id.firebasestorage.app
+   NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=your-sender-id
+   NEXT_PUBLIC_FIREBASE_APP_ID=your-app-id
    ```
 5. Click "Deploy"
 6. Wait 2-3 minutes
@@ -51,7 +51,7 @@ npm run build
 firebase deploy --only hosting
 
 # Your app will be at:
-# https://pho-finder-5175f.web.app
+# https://your-project-id.web.app
 ```
 
 **Note:** Firebase Hosting works best with static sites. For Next.js with dynamic routes, Vercel is recommended.
@@ -73,7 +73,7 @@ All data goes directly to your Firebase Firestore database!
 ## Monitoring Submissions
 
 Watch submissions in real-time:
-- **Firebase Console**: https://console.firebase.google.com/project/pho-finder-5175f/firestore/data
+- **Firebase Console**: https://console.firebase.google.com/project/YOUR_PROJECT_ID/firestore/data
 - View `restaurants` collection to see new submissions
 - View `reviews` collection to see new reviews
 

@@ -66,7 +66,7 @@ Firebase Hosting requires static export. Since your app uses dynamic routes with
    ```
 
 4. **Your app will be live at**:
-   `https://pho-finder-5175f.web.app`
+   `https://your-project-id.web.app`
 
 **Note:** Firebase Hosting with Next.js can be tricky with dynamic routes. If you encounter issues, use Option 1 (Vercel) instead.
 
@@ -109,6 +109,6 @@ All submissions will go directly to your Firebase Firestore database!
 
 ## Monitoring
 
-- **Firebase Console**: https://console.firebase.google.com/project/pho-finder-5175f/firestore
+- **Firebase Console**: https://console.firebase.google.com/project/YOUR_PROJECT_ID/firestore
 - Track submissions in real-time
 - View analytics in Firebase Console

@@ -1,121 +1,193 @@
-# PhoFinder
+# 🍜 PhoFinder
 
-A web application for discovering pho restaurants across the United States. Browse restaurants by state and city, read reviews, submit ratings, and add new restaurants to the community database.
+A community-driven web application for discovering and rating pho restaurants across the United States. Built with Next.js, TypeScript, and Firebase.
 
-## Features
+[![Next.js](https://img.shields.io/badge/Next.js-14-black)](https://nextjs.org/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5-blue)](https://www.typescriptlang.org/)
+[![Firebase](https://img.shields.io/badge/Firebase-10-orange)](https://firebase.google.com/)
+[![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 
-- **State-by-State Navigation**: Browse restaurants organized by state and city
-- **Restaurant Listings**: View detailed information about each restaurant including address, phone, website, and description
-- **Reviews & Ratings**: Read and write reviews, rate restaurants on a 5-star scale
-- **User Submission Portal**: Submit new restaurants to help grow the community
-- **Modern UI**: Clean, responsive design inspired by phofever.com
+## ✨ Features
 
-## Tech Stack
+- **🗺️ State-by-State Navigation**: Browse restaurants organized by state and city
+- **🏪 Detailed Restaurant Listings**: View addresses, phone numbers, websites, and descriptions
+- **⭐ Comprehensive Rating System**: Rate restaurants across 5 categories:
+  - Overall Satisfaction
+  - Broth (flavor, fragrance, clarity)
+  - Noodles (texture, clumpiness)
+  - Meat (tenderness, quality)
+  - Vegetables (variety, freshness)
+- **💬 User Reviews**: Read and write detailed reviews with ratings
+- **➕ Community Submission**: Submit new restaurants to help grow the database
+- **🚨 Closure Reporting**: Community-driven closure reports to keep data accurate
+- **📱 Responsive Design**: Clean, modern UI inspired by phofever.com
 
-- **Next.js 14**: React framework for the frontend
-- **TypeScript**: Type-safe development
-- **Firebase Firestore**: Database for restaurants, reviews, and ratings
-- **Firebase Authentication**: User authentication (anonymous sign-in)
-- **Firebase Hosting**: Deployment platform
+## 🛠️ Tech Stack
 
-## Getting Started
+- **Framework**: [Next.js 14](https://nextjs.org/) with App Router
+- **Language**: [TypeScript](https://www.typescriptlang.org/)
+- **Database**: [Firebase Firestore](https://firebase.google.com/docs/firestore)
+- **Authentication**: [Firebase Auth](https://firebase.google.com/docs/auth) (Anonymous)
+- **Hosting**: [Vercel](https://vercel.com/) (recommended) or Firebase Hosting
+
+## 🚀 Getting Started
 
 ### Prerequisites
 
 - Node.js 18+ and npm
-- Firebase project with Firestore enabled
+- Firebase account ([Sign up for free](https://console.firebase.google.com/))
 
-### Installation
+### Quick Start
 
-1. Install dependencies:
+1. **Clone the repository**
+```bash
+git clone https://github.com/madramdesign/phofinder.git
+cd phofinder
+```
+
+2. **Install dependencies**
 ```bash
 npm install
 ```
 
-2. Set up Firebase:
-   - Create a Firebase project at [Firebase Console](https://console.firebase.google.com/)
-   - Enable Firestore Database
-   - Enable Anonymous Authentication
-   - Copy your Firebase config
+3. **Set up Firebase**
+   - Create a new project at [Firebase Console](https://console.firebase.google.com/)
+   - Enable **Firestore Database** (start in production mode)
+   - Enable **Anonymous Authentication** (Authentication → Sign-in method → Anonymous)
+   - Get your Firebase config from Project Settings
 
-3. Create a `.env.local` file in the root directory:
+4. **Configure environment variables**
+
+Create a `.env.local` file:
 ```env
-NEXT_PUBLIC_FIREBASE_API_KEY=your-api-key
-NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=your-auth-domain
+NEXT_PUBLIC_FIREBASE_API_KEY=your-api-key-here
+NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=your-project-id.firebaseapp.com
 NEXT_PUBLIC_FIREBASE_PROJECT_ID=your-project-id
-NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET=your-storage-bucket
-NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=your-messaging-sender-id
+NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET=your-project-id.firebasestorage.app
+NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=your-sender-id
 NEXT_PUBLIC_FIREBASE_APP_ID=your-app-id
 ```
 
-4. Deploy Firestore rules and indexes:
+See `.env.example` for the template.
+
+5. **Deploy Firestore rules and indexes**
 ```bash
+firebase login
+firebase use your-project-id
 firebase deploy --only firestore:rules,firestore:indexes
 ```
 
-5. Run the development server:
+6. **Run development server**
 ```bash
 npm run dev
 ```
 
-6. Open [http://localhost:3000](http://localhost:3000) in your browser
+7. **Open your browser**
+Visit [http://localhost:3000](http://localhost:3000)
 
-## Database Structure
+## 📊 Database Structure
 
-### Collections
+### Firestore Collections
 
-- **restaurants**: Restaurant information
-  - name, address, city, state, zipCode, phone, website, description
-  - averageRating, totalReviews
-  - createdAt, updatedAt
+#### `restaurants`
+- `name`, `address`, `city`, `state`, `zipCode`
+- `phone`, `website`, `description`
+- `averageRating`, `averageDetailedRatings` (Overall, Broth, Noodles, Meat, Vegetables)
+- `totalReviews`, `isClosed`, `closureReports`
+- `createdAt`, `updatedAt`
 
-- **reviews**: User reviews
-  - restaurantId, userId, userName
-  - rating, comment
-  - createdAt, updatedAt
+#### `reviews`
+- `restaurantId`, `userId`, `userName`
+- `rating` (overall), `detailedRatings` (object with 5 categories)
+- `comment`
+- `createdAt`, `updatedAt`
 
-- **ratings**: User ratings
-  - restaurantId, userId, rating
-  - createdAt, updatedAt
+#### `ratings`
+- `restaurantId`, `userId`
+- `rating` (1-5)
+- `createdAt`, `updatedAt`
 
-## Deployment
+## 🌐 Deployment
 
-### Firebase Hosting
+### Recommended: Vercel (Easiest)
 
-1. Build the application:
+1. **Push to GitHub** (if not already)
+2. **Import to Vercel**: [vercel.com/new](https://vercel.com/new)
+3. **Add environment variables** (from `.env.local`)
+4. **Deploy!** ✅
+
+See [DEPLOY_FROM_GITHUB.md](DEPLOY_FROM_GITHUB.md) for detailed instructions.
+
+### Alternative: Firebase Hosting
+
 ```bash
 npm run build
+firebase deploy --only hosting
 ```
 
-2. Deploy to Firebase:
-```bash
-firebase deploy
-```
-
-## Project Structure
+## 📁 Project Structure
 
 ```
-pho project/
-├── app/                    # Next.js app directory
-│   ├── page.tsx           # Home page (state listing)
-│   ├── layout.tsx         # Root layout
-│   ├── globals.css        # Global styles
-│   ├── state/             # State pages
-│   ├── restaurant/        # Restaurant detail pages
-│   ├── submit/            # Restaurant submission page
-│   └── about/             # About page
-├── lib/                    # Utility functions
-│   ├── firebase.ts        # Firebase initialization
-│   └── db.ts              # Database operations
-├── types/                  # TypeScript types
-│   └── index.ts           # Type definitions
-└── firebase.json          # Firebase configuration
+phofinder/
+├── app/                        # Next.js App Router
+│   ├── page.tsx               # Home page (state listing)
+│   ├── layout.tsx             # Root layout
+│   ├── globals.css            # Global styles
+│   ├── state/[stateName]/     # Dynamic state pages
+│   ├── restaurant/[id]/       # Dynamic restaurant pages
+│   ├── submit/                # Restaurant submission
+│   └── about/                 # About page
+├── lib/                        # Utilities
+│   ├── firebase.ts            # Firebase config
+│   └── db.ts                  # Firestore operations
+├── types/                      # TypeScript definitions
+│   └── index.ts               # Type interfaces
+├── firebase.json              # Firebase hosting config
+├── firestore.rules            # Firestore security rules
+└── firestore.indexes.json     # Firestore indexes
 ```
 
-## Contributing
+## 🎯 Features in Detail
 
-Feel free to submit restaurants, write reviews, and help improve PhoFinder!
+### Browse by State & City
+- Navigate to any US state
+- Filter restaurants by city
+- View restaurants organized by area code
 
-## License
+### Detailed Ratings
+- Rate restaurants across 5 categories
+- See average ratings for each category
+- Read detailed user reviews with ratings
 
-Copyright © 2024 PhoFinder. All rights reserved.
+### Community Driven
+- Anyone can submit restaurants
+- Community reviews and ratings
+- Closure reporting (3+ reports marks restaurant as closed)
+
+## 🔒 Security
+
+- Firestore rules restrict writes to authenticated users
+- Anonymous authentication for easy community participation
+- Public read access for browsing restaurants
+- User-specific write access for reviews and ratings
+
+## 📝 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## 🙏 Acknowledgments
+
+- Inspired by [PhoFever.com](http://www.phofever.com/)
+- Built with [Next.js](https://nextjs.org/) and [Firebase](https://firebase.google.com/)
+
+## 🤝 Contributing
+
+Contributions are welcome! Feel free to:
+- Submit restaurants in your area
+- Write reviews and ratings
+- Report bugs or suggest features
+- Fork and improve the codebase
+
+---
+
+Made with ❤️ for pho lovers everywhere 🍜
