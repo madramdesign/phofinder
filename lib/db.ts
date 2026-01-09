@@ -154,6 +154,10 @@ export const getReviews = async (restaurantId: string): Promise<Review[]> => {
 };
 
 export const addReview = async (review: Omit<Review, 'id' | 'createdAt' | 'updatedAt'>): Promise<string> => {
+  if (!db) {
+    throw new Error('Database not initialized.');
+  }
+  
   const reviewsRef = collection(db, 'reviews');
   const now = Timestamp.now();
   const docRef = await addDoc(reviewsRef, {
@@ -170,24 +174,38 @@ export const addReview = async (review: Omit<Review, 'id' | 'createdAt' | 'updat
 
 // Rating operations
 export const getRating = async (restaurantId: string, userId: string): Promise<Rating | null> => {
-  const ratingsRef = collection(db, 'ratings');
-  const q = query(
-    ratingsRef,
-    where('restaurantId', '==', restaurantId),
-    where('userId', '==', userId)
-  );
-  const snapshot = await getDocs(q);
-  if (snapshot.empty) return null;
-  const doc = snapshot.docs[0];
-  return {
-    id: doc.id,
-    ...doc.data(),
-    createdAt: doc.data().createdAt?.toDate() || new Date(),
-    updatedAt: doc.data().updatedAt?.toDate() || new Date(),
-  } as Rating;
+  if (!db) {
+    console.error('Firestore not initialized');
+    return null;
+  }
+  
+  try {
+    const ratingsRef = collection(db, 'ratings');
+    const q = query(
+      ratingsRef,
+      where('restaurantId', '==', restaurantId),
+      where('userId', '==', userId)
+    );
+    const snapshot = await getDocs(q);
+    if (snapshot.empty) return null;
+    const doc = snapshot.docs[0];
+    return {
+      id: doc.id,
+      ...doc.data(),
+      createdAt: doc.data().createdAt?.toDate() || new Date(),
+      updatedAt: doc.data().updatedAt?.toDate() || new Date(),
+    } as Rating;
+  } catch (error) {
+    console.error('Error fetching rating:', error);
+    return null;
+  }
 };
 
 export const addOrUpdateRating = async (rating: Omit<Rating, 'id' | 'createdAt' | 'updatedAt'>): Promise<void> => {
+  if (!db) {
+    throw new Error('Database not initialized.');
+  }
+  
   const existingRating = await getRating(rating.restaurantId, rating.userId);
   const now = Timestamp.now();
   
@@ -212,6 +230,11 @@ export const addOrUpdateRating = async (rating: Omit<Rating, 'id' | 'createdAt' 
 
 // Helper function to update restaurant average rating and detailed ratings
 const updateRestaurantRating = async (restaurantId: string): Promise<void> => {
+  if (!db) {
+    console.error('Firestore not initialized, skipping rating update');
+    return;
+  }
+  
   // Update from ratings collection
   const ratingsRef = collection(db, 'ratings');
   const q = query(ratingsRef, where('restaurantId', '==', restaurantId));

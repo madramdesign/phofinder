@@ -37,19 +37,30 @@ export default function SubmitPage() {
   const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
-      if (!currentUser) {
-        try {
-          await signInAnonymously(auth);
-        } catch (error) {
-          console.error('Error signing in:', error);
-        }
-      } else {
-        setUser(currentUser);
-      }
+    if (!auth) {
+      console.error('Auth not initialized');
       setLoading(false);
-    });
-    return () => unsubscribe();
+      return;
+    }
+    try {
+      const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
+        if (!currentUser) {
+          if (!auth) return;
+          try {
+            await signInAnonymously(auth);
+          } catch (error) {
+            console.error('Error signing in:', error);
+          }
+        } else {
+          setUser(currentUser);
+        }
+        setLoading(false);
+      });
+      return () => unsubscribe();
+    } catch (error) {
+      console.error('Error setting up auth state listener:', error);
+      setLoading(false);
+    }
   }, []);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
@@ -69,7 +80,10 @@ export default function SubmitPage() {
       let currentUser = user;
       if (!currentUser) {
         try {
-          const result = await signInAnonymously(auth);
+          if (!auth) {
+          throw new Error('Authentication not initialized');
+        }
+        const result = await signInAnonymously(auth);
           currentUser = result.user;
           setUser(currentUser);
         } catch (authError: any) {

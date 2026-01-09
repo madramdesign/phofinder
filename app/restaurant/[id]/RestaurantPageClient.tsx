@@ -45,10 +45,14 @@ export default function RestaurantPageClient({ restaurantId }: RestaurantPageCli
       console.error('Auth not initialized');
       return;
     }
-    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
-      setUser(currentUser);
-    });
-    return () => unsubscribe();
+    try {
+      const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+        setUser(currentUser);
+      });
+      return () => unsubscribe();
+    } catch (error) {
+      console.error('Error setting up auth state listener:', error);
+    }
   }, []);
 
   useEffect(() => {
@@ -107,7 +111,16 @@ export default function RestaurantPageClient({ restaurantId }: RestaurantPageCli
 
     setSubmitting(true);
     try {
-      const currentUser = user || (await signInAnonymously(auth)).user;
+      if (!auth) {
+        alert('Authentication not initialized. Please refresh the page.');
+        setSubmitting(false);
+        return;
+      }
+      let currentUser = user;
+      if (!currentUser) {
+        const result = await signInAnonymously(auth);
+        currentUser = result.user;
+      }
       
       await addReview({
         restaurantId,
@@ -264,6 +277,10 @@ export default function RestaurantPageClient({ restaurantId }: RestaurantPageCli
                   onClick={() => {
                     if (!user) {
                       // Sign in anonymously if not signed in
+                      if (!auth) {
+                        alert('Authentication not initialized. Please refresh the page.');
+                        return;
+                      }
                       signInAnonymously(auth).then(() => {
                         setShowReviewForm(true);
                       }).catch((error) => {
@@ -385,6 +402,10 @@ export default function RestaurantPageClient({ restaurantId }: RestaurantPageCli
                 className="btn"
                 onClick={() => {
                   if (!user) {
+                    if (!auth) {
+                      alert('Authentication not initialized. Please refresh the page.');
+                      return;
+                    }
                     signInAnonymously(auth).then(() => {
                       setShowReviewForm(true);
                     }).catch((error) => {
