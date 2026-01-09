@@ -188,7 +188,11 @@ Pho House,321 Elm Street,Chicago,Illinois,60601,312-555-3456,,Family-owned resta
 
       <main className="main-content">
         <div className="container">
-          <h2 style={{ marginBottom: '1rem' }}>Bulk Import Restaurants from CSV</h2>
+          {loading ? (
+            <div className="loading">Loading...</div>
+          ) : (
+            <>
+              <h2 style={{ marginBottom: '1rem' }}>Bulk Import Restaurants from CSV</h2>
           
           <div className="card" style={{ marginBottom: '2rem' }}>
             <h3 style={{ marginBottom: '1rem', color: '#8B4513' }}>CSV Format</h3>
@@ -278,6 +282,9 @@ Pho House,321 Elm Street,Chicago,Illinois,60601,312-555-3456,,Family-owned resta
               <li>Import in batches of 50-100 restaurants for best results</li>
             </ul>
           </div>
+        </div>
+            </>
+          )}
         </div>
       </main>
 
