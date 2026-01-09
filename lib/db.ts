@@ -37,44 +37,74 @@ export const getRestaurants = async (): Promise<Restaurant[]> => {
 };
 
 export const getRestaurantsByState = async (state: string): Promise<Restaurant[]> => {
-  const restaurantsRef = collection(db, 'restaurants');
-  const q = query(restaurantsRef, where('state', '==', state), orderBy('city'), orderBy('name'));
-  const snapshot = await getDocs(q);
-  return snapshot.docs.map(doc => ({
-    id: doc.id,
-    ...doc.data(),
-    createdAt: doc.data().createdAt?.toDate() || new Date(),
-    updatedAt: doc.data().updatedAt?.toDate() || new Date(),
-  })) as Restaurant[];
+  if (!db) {
+    console.error('Firestore not initialized');
+    return [];
+  }
+  
+  try {
+    const restaurantsRef = collection(db, 'restaurants');
+    const q = query(restaurantsRef, where('state', '==', state), orderBy('city'), orderBy('name'));
+    const snapshot = await getDocs(q);
+    return snapshot.docs.map(doc => ({
+      id: doc.id,
+      ...doc.data(),
+      createdAt: doc.data().createdAt?.toDate() || new Date(),
+      updatedAt: doc.data().updatedAt?.toDate() || new Date(),
+    })) as Restaurant[];
+  } catch (error) {
+    console.error('Error fetching restaurants by state:', error);
+    return [];
+  }
 };
 
 export const getRestaurantsByCity = async (state: string, city: string): Promise<Restaurant[]> => {
-  const restaurantsRef = collection(db, 'restaurants');
-  const q = query(
-    restaurantsRef, 
-    where('state', '==', state), 
-    where('city', '==', city),
-    orderBy('name')
-  );
-  const snapshot = await getDocs(q);
-  return snapshot.docs.map(doc => ({
-    id: doc.id,
-    ...doc.data(),
-    createdAt: doc.data().createdAt?.toDate() || new Date(),
-    updatedAt: doc.data().updatedAt?.toDate() || new Date(),
-  })) as Restaurant[];
+  if (!db) {
+    console.error('Firestore not initialized');
+    return [];
+  }
+  
+  try {
+    const restaurantsRef = collection(db, 'restaurants');
+    const q = query(
+      restaurantsRef, 
+      where('state', '==', state), 
+      where('city', '==', city),
+      orderBy('name')
+    );
+    const snapshot = await getDocs(q);
+    return snapshot.docs.map(doc => ({
+      id: doc.id,
+      ...doc.data(),
+      createdAt: doc.data().createdAt?.toDate() || new Date(),
+      updatedAt: doc.data().updatedAt?.toDate() || new Date(),
+    })) as Restaurant[];
+  } catch (error) {
+    console.error('Error fetching restaurants by city:', error);
+    return [];
+  }
 };
 
 export const getRestaurant = async (id: string): Promise<Restaurant | null> => {
-  const restaurantRef = doc(db, 'restaurants', id);
-  const snapshot = await getDoc(restaurantRef);
-  if (!snapshot.exists()) return null;
-  return {
-    id: snapshot.id,
-    ...snapshot.data(),
-    createdAt: snapshot.data().createdAt?.toDate() || new Date(),
-    updatedAt: snapshot.data().updatedAt?.toDate() || new Date(),
-  } as Restaurant;
+  if (!db) {
+    console.error('Firestore not initialized');
+    return null;
+  }
+  
+  try {
+    const restaurantRef = doc(db, 'restaurants', id);
+    const snapshot = await getDoc(restaurantRef);
+    if (!snapshot.exists()) return null;
+    return {
+      id: snapshot.id,
+      ...snapshot.data(),
+      createdAt: snapshot.data().createdAt?.toDate() || new Date(),
+      updatedAt: snapshot.data().updatedAt?.toDate() || new Date(),
+    } as Restaurant;
+  } catch (error) {
+    console.error('Error fetching restaurant:', error);
+    return null;
+  }
 };
 
 export const addRestaurant = async (restaurant: Omit<Restaurant, 'id' | 'createdAt' | 'updatedAt'>): Promise<string> => {
@@ -98,19 +128,29 @@ export const addRestaurant = async (restaurant: Omit<Restaurant, 'id' | 'created
 
 // Review operations
 export const getReviews = async (restaurantId: string): Promise<Review[]> => {
-  const reviewsRef = collection(db, 'reviews');
-  const q = query(
-    reviewsRef, 
-    where('restaurantId', '==', restaurantId),
-    orderBy('createdAt', 'desc')
-  );
-  const snapshot = await getDocs(q);
-  return snapshot.docs.map(doc => ({
-    id: doc.id,
-    ...doc.data(),
-    createdAt: doc.data().createdAt?.toDate() || new Date(),
-    updatedAt: doc.data().updatedAt?.toDate() || new Date(),
-  })) as Review[];
+  if (!db) {
+    console.error('Firestore not initialized');
+    return [];
+  }
+  
+  try {
+    const reviewsRef = collection(db, 'reviews');
+    const q = query(
+      reviewsRef, 
+      where('restaurantId', '==', restaurantId),
+      orderBy('createdAt', 'desc')
+    );
+    const snapshot = await getDocs(q);
+    return snapshot.docs.map(doc => ({
+      id: doc.id,
+      ...doc.data(),
+      createdAt: doc.data().createdAt?.toDate() || new Date(),
+      updatedAt: doc.data().updatedAt?.toDate() || new Date(),
+    })) as Review[];
+  } catch (error) {
+    console.error('Error fetching reviews:', error);
+    return [];
+  }
 };
 
 export const addReview = async (review: Omit<Review, 'id' | 'createdAt' | 'updatedAt'>): Promise<string> => {

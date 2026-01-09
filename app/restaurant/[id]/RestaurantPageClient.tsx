@@ -41,6 +41,10 @@ export default function RestaurantPageClient({ restaurantId }: RestaurantPageCli
   const [reportingClosure, setReportingClosure] = useState(false);
 
   useEffect(() => {
+    if (!auth) {
+      console.error('Auth not initialized');
+      return;
+    }
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       setUser(currentUser);
     });
@@ -75,6 +79,10 @@ export default function RestaurantPageClient({ restaurantId }: RestaurantPageCli
 
   const handleSubmitReview = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!auth) {
+      alert('Authentication not initialized. Please refresh the page.');
+      return;
+    }
     if (!user) {
       try {
         await signInAnonymously(auth);
@@ -123,6 +131,10 @@ export default function RestaurantPageClient({ restaurantId }: RestaurantPageCli
   };
 
   const handleReportClosure = async () => {
+    if (!auth) {
+      alert('Authentication not initialized. Please refresh the page.');
+      return;
+    }
     if (!user) {
       try {
         await signInAnonymously(auth);
@@ -171,8 +183,29 @@ export default function RestaurantPageClient({ restaurantId }: RestaurantPageCli
   if (!restaurant) {
     return (
       <div>
-        <div className="error">Restaurant not found</div>
-        <Link href="/" className="btn">Back to Home</Link>
+        <header className="header">
+          <div className="container">
+            <h1>PhoFinder</h1>
+            <p>Restaurant Details</p>
+          </div>
+        </header>
+        <nav className="nav">
+          <div className="container">
+            <ul>
+              <li><Link href="/">Home</Link></li>
+              <li><Link href="/submit">Submit Restaurant</Link></li>
+            </ul>
+          </div>
+        </nav>
+        <main className="main-content">
+          <div className="container">
+            <div style={{ textAlign: 'center', padding: '3rem' }}>
+              <h2 style={{ marginBottom: '1rem', color: '#d32f2f' }}>Restaurant not found</h2>
+              <p style={{ marginBottom: '2rem' }}>The restaurant you're looking for doesn't exist or has been removed.</p>
+              <Link href="/" className="btn">Back to Home</Link>
+            </div>
+          </div>
+        </main>
       </div>
     );
   }
