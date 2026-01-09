@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Firebase Check</title>
+    <script type="module">
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js';
+        import { getAuth, signInAnonymously, connectAuthEmulator } from 'https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js';
+        import { getFirestore, collection, addDoc } from 'https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js';
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyAFprLpxNB9TzvB1sZWGQCEGt_XDwj76eg",
+            authDomain: "pho-finder-5175f.firebaseapp.com",
+            projectId: "pho-finder-5175f",
+            storageBucket: "pho-finder-5175f.firebasestorage.app",
+            messagingSenderId: "1035496743136",
+            appId: "1:1035496743136:web:2607dfcba507001e8db085"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        async function testFirebase() {
+            const output = document.getElementById('output');
+            output.innerHTML = '<h3>Testing Firebase...</h3>';
+
+            try {
+                // Test Authentication
+                output.innerHTML += '<p>1. Testing Anonymous Authentication...</p>';
+                const userCredential = await signInAnonymously(auth);
+                output.innerHTML += `<p style="color: green;">✅ Anonymous Auth: Success! User ID: ${userCredential.user.uid}</p>`;
+
+                // Test Firestore Write
+                output.innerHTML += '<p>2. Testing Firestore Write...</p>';
+                const testRef = collection(db, 'test');
+                const docRef = await addDoc(testRef, {
+                    test: true,
+                    timestamp: new Date()
+                });
+                output.innerHTML += `<p style="color: green;">✅ Firestore Write: Success! Document ID: ${docRef.id}</p>`;
+
+                output.innerHTML += '<h3 style="color: green;">✅ All tests passed! Firebase is configured correctly.</h3>';
+            } catch (error) {
+                output.innerHTML += `<p style="color: red;">❌ Error: ${error.message}</p>`;
+                output.innerHTML += `<p style="color: red;">Error Code: ${error.code || 'Unknown'}</p>`;
+                
+                if (error.code === 'auth/operation-not-allowed') {
+                    output.innerHTML += '<p style="color: orange;"><strong>⚠️ Anonymous Authentication is not enabled!</strong></p>';
+                    output.innerHTML += '<p>Enable it at: <a href="https://console.firebase.google.com/project/pho-finder-5175f/authentication/providers" target="_blank">Firebase Console > Authentication</a></p>';
+                } else if (error.code && error.code.includes('permission')) {
+                    output.innerHTML += '<p style="color: orange;"><strong>⚠️ Firestore permission denied!</strong></p>';
+                    output.innerHTML += '<p>Check Firestore rules at: <a href="https://console.firebase.google.com/project/pho-finder-5175f/firestore/rules" target="_blank">Firestore Rules</a></p>';
+                }
+            }
+        }
+
+        window.testFirebase = testFirebase;
+    </script>
+</head>
+<body>
+    <h1>Firebase Configuration Test</h1>
+    <button onclick="testFirebase()" style="padding: 10px 20px; font-size: 16px;">Test Firebase</button>
+    <div id="output" style="margin-top: 20px; padding: 20px; border: 1px solid #ccc; border-radius: 4px;"></div>
+</body>
+</html>
