@@ -40,6 +40,9 @@ next-env.d.ts
 
 # sensitive files
 check-firebase.html
+vercel-env.txt
 
 # deployment scripts (keep deploy.sh but ignore sensitive data)
 # .vercel.env is already ignored above
+vercel-env.txt
+VERCEL_ENV_VARS.txt

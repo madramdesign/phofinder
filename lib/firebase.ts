@@ -11,28 +11,24 @@ const firebaseConfig = {
   appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID || "your-app-id"
 };
 
-// Initialize Firebase app
-const app: FirebaseApp = typeof window !== 'undefined' && !getApps().length
-  ? initializeApp(firebaseConfig)
-  : getApps()[0] || ({} as FirebaseApp);
-
-// Initialize services (only on client side)
-let db: Firestore;
-let auth: Auth;
+// Initialize Firebase app (only on client side)
+let app: FirebaseApp | undefined;
+let db: Firestore | undefined;
+let auth: Auth | undefined;
 
 if (typeof window !== 'undefined') {
+  if (!getApps().length) {
+    app = initializeApp(firebaseConfig);
+  } else {
+    app = getApps()[0];
+  }
+  
   try {
     db = getFirestore(app);
     auth = getAuth(app);
   } catch (error) {
     console.error('Firebase initialization error:', error);
-    // Create dummy instances for type safety during build
-    throw new Error('Firebase not properly initialized. Check your .env.local file.');
   }
-} else {
-  // Server-side: create dummy instances for type safety
-  db = {} as Firestore;
-  auth = {} as Auth;
 }
 
 export { db, auth };

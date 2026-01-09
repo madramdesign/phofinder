@@ -16,14 +16,24 @@ import { Restaurant, Review, Rating, DetailedRatings } from '@/types';
 
 // Restaurant operations
 export const getRestaurants = async (): Promise<Restaurant[]> => {
-  const restaurantsRef = collection(db, 'restaurants');
-  const snapshot = await getDocs(restaurantsRef);
-  return snapshot.docs.map(doc => ({
-    id: doc.id,
-    ...doc.data(),
-    createdAt: doc.data().createdAt?.toDate() || new Date(),
-    updatedAt: doc.data().updatedAt?.toDate() || new Date(),
-  })) as Restaurant[];
+  if (!db) {
+    console.error('Firestore not initialized');
+    return [];
+  }
+  
+  try {
+    const restaurantsRef = collection(db, 'restaurants');
+    const snapshot = await getDocs(restaurantsRef);
+    return snapshot.docs.map(doc => ({
+      id: doc.id,
+      ...doc.data(),
+      createdAt: doc.data().createdAt?.toDate() || new Date(),
+      updatedAt: doc.data().updatedAt?.toDate() || new Date(),
+    })) as Restaurant[];
+  } catch (error) {
+    console.error('Error fetching restaurants:', error);
+    return [];
+  }
 };
 
 export const getRestaurantsByState = async (state: string): Promise<Restaurant[]> => {
