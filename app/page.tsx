@@ -51,6 +51,8 @@ export default function Home() {
       setStateCities(stateCityList);
     } catch (error) {
       console.error('Error loading restaurants:', error);
+      // Ensure loading state is cleared even on error
+      setStateCities([]);
     } finally {
       setLoading(false);
     }
